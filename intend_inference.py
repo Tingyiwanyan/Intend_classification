@@ -26,8 +26,8 @@ def intent_inference(text_input: str, model_path: str) -> str:
 
 	res = classifier(text__input)
 
-	intent = res{'label'}
-	score = res{'score'}
+	intent = res['label']
+	score = res['score']
 
 	return intent, score
 
