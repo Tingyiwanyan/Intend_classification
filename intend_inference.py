@@ -48,7 +48,8 @@ def model_finetune(num_labels: int, model_path: str, save_model_path: str, id2la
 
 	model = AutoModelForSequenceClassification.from_pretrained(
     model_path, num_labels=num_labels, id2label=id2label, label2id=label2id)
-    tokenizer = AutoTokenizer.from_pretrained(model_path)
+
+    #tokenizer = AutoTokenizer.from_pretrained(model_path)
 
 
 
