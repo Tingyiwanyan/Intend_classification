@@ -103,7 +103,7 @@ def compute_metrics(eval_pred):
     
 
 
-def generate_dateframe(text: List[str], label: List[int], model_path: str) -> datasets.Dataset:
+def generate_dateframe(text: list, label: list, model_path: str) -> datasets.Dataset:
 	"""
 	generate customer tokenized dataset 
 
