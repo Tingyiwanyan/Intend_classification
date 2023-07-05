@@ -16,10 +16,10 @@ train_text = train_data['template']
 test_label = test_data['intent_class']
 test_text = test_data['template']
 
-tokenized_train_df = generate_dateframe(list(train_text), list(train_label), "/home/ubuntu/intent_classification/pre_train_models/XLMRoberta-Alexa-Intents-Classification")
-tokenized_test_df = generate_dateframe(list(test_text), list(test_label), "/home/ubuntu/intent_classification/pre_train_models/XLMRoberta-Alexa-Intents-Classification")
+tokenized_train_df = generate_dateframe(list(train_text), list(train_label), "distilbert-base-uncased")
+tokenized_test_df = generate_dateframe(list(test_text), list(test_label), "distilbert-base-uncased")
 
-model_finetune(14, "/home/ubuntu/intent_classification/pre_train_models/XLMRoberta-Alexa-Intents-Classification", '/home/ubuntu/intent_classification/fine_tune_models/my_model', id2label, label2id,\
+model_finetune(14, "distilbert-base-uncased", '/home/ubuntu/intent_classification/fine_tune_models/my_model', id2label, label2id,\
 					tokenized_train_df, tokenized_test_df)
 
 
