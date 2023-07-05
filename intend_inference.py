@@ -1,6 +1,6 @@
 from transformers import AutoTokenizer, \
 AutoModelForSequenceClassification, TextClassificationPipeline,\
-TrainingArguments, Trainer, DataCollatorWithPadding
+TrainingArguments, Trainer, DataCollatorWithPadding, AutoModel
 import torch
 from torch.utils.data import DataLoader
 import pandas as pd
@@ -13,6 +13,7 @@ EVAL_BATCH = 16
 TRAIN_EPOCHS = 3
 LEARNING_RATE = 2e-5
 WEIGHT_DECAY = 0.01
+ACCESS_TOKEN = "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"
 
 
 def intent_inference(text_input: str, model_path: str) -> str:
@@ -30,7 +31,7 @@ def intent_inference(text_input: str, model_path: str) -> str:
 	"""
 
 	tokenizer = AutoTokenizer.from_pretrained(model_path)
-	model = AutoModelForSequenceClassification.from_pretrained(model_path)
+	model = AutoModelForSequenceClassification.from_pretrained(model_path, use_auth_token=ACCESS_TOKEN)
 	classifier = TextClassificationPipeline(model=model, tokenizer=tokenizer)
 
 	res = classifier(text_input)
@@ -61,7 +62,8 @@ def model_finetune(num_labels: int, model_path: str, save_model_path: str, id2la
 	tokenizer = AutoTokenizer.from_pretrained(model_path)
 
 	model = AutoModelForSequenceClassification.from_pretrained(
-		model_path, num_labels=int(num_labels), id2label=id2label, label2id=label2id, ignore_mismatched_sizes=True)
+		model_path, num_labels=int(num_labels), id2label=id2label, label2id=label2id, \
+		ignore_mismatched_sizes=True, use_auth_token=ACCESS_TOKEN)
 
 	data_collator = DataCollatorWithPadding(tokenizer=tokenizer, return_tensors="tf")
 
