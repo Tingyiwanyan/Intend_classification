@@ -1,19 +1,20 @@
 from transformers import AutoTokenizer, \
 AutoModelForSequenceClassification, TextClassificationPipeline,\
-TrainingArguments, Trainer, DataCollatorWithPadding, AutoModel
+TrainingArguments, Trainer, DataCollatorWithPadding, create_optimizer
+from transformers.keras_callbacks import KerasMetricCallback, PushToHubCallback
 import torch
 from torch.utils.data import DataLoader
 import pandas as pd
 from datasets import Dataset
 import datasets
 import evaluate
+import tensorflow as tf
 
 TRAIN_BATCH = 32
 EVAL_BATCH = 16
 TRAIN_EPOCHS = 3
 LEARNING_RATE = 2e-5
 WEIGHT_DECAY = 0.01
-ACCESS_TOKEN = "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"
 
 
 def intent_inference(text_input: str, model_path: str) -> str:
@@ -31,7 +32,7 @@ def intent_inference(text_input: str, model_path: str) -> str:
 	"""
 
 	tokenizer = AutoTokenizer.from_pretrained(model_path)
-	model = AutoModelForSequenceClassification.from_pretrained(model_path, use_auth_token=ACCESS_TOKEN)
+	model = AutoModelForSequenceClassification.from_pretrained(model_path)
 	classifier = TextClassificationPipeline(model=model, tokenizer=tokenizer)
 
 	res = classifier(text_input)
@@ -40,7 +41,6 @@ def intent_inference(text_input: str, model_path: str) -> str:
 	score = res['score']
 
 	return intent, score
-
 
 
 def model_finetune(num_labels: int, model_path: str, save_model_path: str, id2label: dict, label2id: dict,\
@@ -58,15 +58,42 @@ def model_finetune(num_labels: int, model_path: str, save_model_path: str, id2la
 	train_df: tokenized training data
 	test_df: tokenized testing data
 	"""
-
+	batches_per_epoch = len(train_df) // TRAIN_BATCH
+	total_train_steps = int(batches_per_epoch * TRAIN_EPOCHS)
+	optimizer, schedule = create_optimizer(init_lr=LEARNING_RATE, num_warmup_steps=0, \
+		num_train_steps=total_train_steps)
 	tokenizer = AutoTokenizer.from_pretrained(model_path)
 
 	model = AutoModelForSequenceClassification.from_pretrained(
 		model_path, num_labels=int(num_labels), id2label=id2label, label2id=label2id, \
-		ignore_mismatched_sizes=True, use_auth_token=ACCESS_TOKEN)
+		ignore_mismatched_sizes=True)
 
 	data_collator = DataCollatorWithPadding(tokenizer=tokenizer, return_tensors="tf")
 
+	tf_train_set = model.prepare_tf_dataset(
+		train_df,
+		shuffle=True,
+		batch_size=TRAIN_BATCH,
+		collate_fn=data_collator,)
+
+	tf_validation_set = model.prepare_tf_dataset(
+		test_df,
+		shuffle=False,
+		batch_size=EVAL_BATCH,
+		collate_fn=data_collator,)
+
+	metric_callback = KerasMetricCallback(metric_fn=compute_metrics, \
+		eval_dataset=tf_validation_set)
+
+	push_to_hub_callback = PushToHubCallback(
+		output_dir=save_model_path,
+		tokenizer=tokenizer,)
+
+	model.fit(x=tf_train_set, validation_data=tf_validation_set, \
+		epochs=TRAIN_BATCH, callbacks=callbacks)
+
+	
+	"""
 	training_args = TrainingArguments(
 		output_dir=save_model_path,
 	    learning_rate=LEARNING_RATE,
@@ -89,7 +116,7 @@ def model_finetune(num_labels: int, model_path: str, save_model_path: str, id2la
 		compute_metrics=compute_metrics,)
 
 	trainer.train()
-
+	"""
 
 def compute_metrics(eval_pred):
 	"""
