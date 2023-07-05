@@ -83,6 +83,8 @@ def model_finetune(num_labels: int, model_path: str, save_model_path: str, id2la
 		batch_size=EVAL_BATCH,
 		collate_fn=data_collator,)
 
+	model.compile(optimizer=optimizer)
+
 	metric_callback = KerasMetricCallback(metric_fn=compute_metrics, \
 		eval_dataset=tf_validation_set)
 
