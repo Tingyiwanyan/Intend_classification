@@ -25,9 +25,9 @@ train_df_torch = Dataset.from_pandas(train_df)
 
 test_df_torch = Dataset.from_pandas(test_df)
 
-tokenized_train_df = train_df_torch.map(data_preprocess, batched=True)
+tokenized_train_df = train_df_torch.map(preprocess_function, batched=True)
 
-tokenized_test_df = test_df_torch.map(data_preprocess, batched=True)
+tokenized_test_df = test_df_torch.map(preprocess_function, batched=True)
 
 
 
