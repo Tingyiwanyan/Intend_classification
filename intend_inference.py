@@ -124,7 +124,7 @@ def generate_dateframe(text: list, label: list, model_path: str) -> datasets.Dat
 	tokenizer = AutoTokenizer.from_pretrained(model_path)
 	def preprocess_function(text):
 
-		return tokenizer(text["text"], trucation=True)
+		return tokenizer(text["text"], truncation=True)
 
 	return df_torch.map(preprocess_function, batched=True)
 
