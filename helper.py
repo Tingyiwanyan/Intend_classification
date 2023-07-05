@@ -2,7 +2,7 @@ from intend_inference import *
 import numpy as np
 
 
-tokenizer = AutoTokenizer.from_pretrained('XLMRoberta-Alexa-Intents-Classification')
+tokenizer = AutoTokenizer.from_pretrained("distilbert-base-uncased")
 
 train_data = pd.read_csv('/home/ubuntu/intent_classification/dataset/speech-to-intent/train.csv')
 test_data = pd.read_csv('/home/ubuntu/intent_classification/dataset/speech-to-intent/test.csv')
