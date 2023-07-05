@@ -1,7 +1,7 @@
 from transformers import AutoTokenizer, \
 AutoModelForSequenceClassification, TextClassificationPipeline,\
 TrainingArguments, Trainer, DataCollatorWithPadding, \
-create_optimizer, TFAutoModelForSequenceClassification
+create_optimizer, TFAutoModelForSequenceClassification, pipeline
 from transformers.keras_callbacks import KerasMetricCallback, PushToHubCallback
 import torch
 from torch.utils.data import DataLoader
@@ -34,15 +34,15 @@ def intent_inference(text_input: str, model_path: str) -> str:
 	"""
 
 	tokenizer = AutoTokenizer.from_pretrained(model_path)
-	model = AutoModelForSequenceClassification.from_pretrained(model_path)
+	model = TFAutoModelForSequenceClassification.from_pretrained(model_path)
 	classifier = TextClassificationPipeline(model=model, tokenizer=tokenizer)
 
 	res = classifier(text_input)
 
-	intent = res['label']
-	score = res['score']
+	#intent = res['label']
+	#score = res['score']
 
-	return intent, score
+	return res
 
 
 def model_finetune(num_labels: int, model_path: str, save_model_path: str, id2label: dict, label2id: dict,\
