@@ -10,6 +10,7 @@ from datasets import Dataset
 import datasets
 import evaluate
 import tensorflow as tf
+import numpy as np
 
 TRAIN_BATCH = 32
 EVAL_BATCH = 16
