@@ -7,8 +7,8 @@ test_data = pd.read_csv('/home/ubuntu/intent_classification/dataset/speech-to-in
 
 intent_info = pd.read_csv('/home/ubuntu/intent_classification/dataset/speech-to-intent/intent_info.csv')
 
-id2label = {intent_info['intent_class'][i]:intent_info['intent_name'][i] for i in range(intent_info.shape[0])}
-label2id = {intent_info['intent_name'][i]:intent_info['intent_class'][i] for i in range(intent_info.shape[0])}
+id2label = {int(intent_info['intent_class'][i]):intent_info['intent_name'][i] for i in range(intent_info.shape[0])}
+label2id = {intent_info['intent_name'][i]:int(intent_info['intent_class'][i]) for i in range(intent_info.shape[0])}
 
 train_label = train_data['intent_class']
 train_text = train_data['template']
