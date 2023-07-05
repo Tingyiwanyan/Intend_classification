@@ -2,8 +2,6 @@ from intend_inference import *
 import numpy as np
 
 
-tokenizer = AutoTokenizer.from_pretrained("distilbert-base-uncased")
-
 train_data = pd.read_csv('/home/ubuntu/intent_classification/dataset/speech-to-intent/train.csv')
 test_data = pd.read_csv('/home/ubuntu/intent_classification/dataset/speech-to-intent/test.csv')
 
@@ -18,17 +16,9 @@ train_text = train_data['template']
 test_label = test_data['intent_class']
 test_text = test_data['template']
 
-train_df = pd.DataFrame({'text':list(train_text),'label':list(train_label)})
+tokenized_train_df = generate_dateframe(list(train_text), list(train_label), "distilbert-base-uncased")
+tokenized_test_df = generate_dateframe(list(test_text), list(test_label), "distilbert-base-uncased")
 
-test_df = pd.DataFrame({'text':list(test_text), 'label':list(test_label)})
-
-train_df_torch = Dataset.from_pandas(train_df)
-
-test_df_torch = Dataset.from_pandas(test_df)
-
-tokenized_train_df = train_df_torch.map(preprocess_function(tokenizer), batched=True)
-
-tokenized_test_df = test_df_torch.map(preprocess_function(tokenizer), batched=True)
 
 
 

@@ -103,7 +103,7 @@ def compute_metrics(eval_pred):
     
 
 
-def generate_dateframe(text: list[str], label: list[int]) -> datasets.Dataset:
+def generate_dateframe(text: list[str], label: list[int], model_path: str) -> datasets.Dataset:
 	"""
 	generate customer tokenized dataset 
 
@@ -111,6 +111,7 @@ def generate_dateframe(text: list[str], label: list[int]) -> datasets.Dataset:
 	-----------
 	text: list of string inputs
 	label: list of label inputs
+	model_path: path to LLM model
 
 	Returns:
 	--------
@@ -120,23 +121,15 @@ def generate_dateframe(text: list[str], label: list[int]) -> datasets.Dataset:
 
 	df_torch = Dataset.from_pandas(df)
 
+	tokenizer = AutoTokenizer.from_pretrained(model_path)
+	def preprocess_function(text: str) -> str:
+		
+		return tokenizer(text, trucation=True)
+
 	return df_torch.map(preprocess_function, batched=True)
 
 
-def preprocess_function(text: str, tokenizer) -> str:
-	"""
-	truncate input text to maximum model input length
 
-	Parameters:
-	-----------
-	text: input text string
-	tokenizer: pre-trained model tokenizer
-
-	Return:
-	truncated tokenize text string
-	"""
-
-	return tokenizer(text, trucation=True)
 
 
 
