@@ -103,7 +103,7 @@ def compute_metrics(eval_pred):
     
 
 
-def generate_dateframe(text: list[str], label: list[int], model_path: str) -> datasets.Dataset:
+def generate_dateframe(text: List[str], label: List[int], model_path: str) -> datasets.Dataset:
 	"""
 	generate customer tokenized dataset 
 
@@ -123,7 +123,7 @@ def generate_dateframe(text: list[str], label: list[int], model_path: str) -> da
 
 	tokenizer = AutoTokenizer.from_pretrained(model_path)
 	def preprocess_function(text: str) -> str:
-		
+
 		return tokenizer(text, trucation=True)
 
 	return df_torch.map(preprocess_function, batched=True)
