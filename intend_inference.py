@@ -120,7 +120,7 @@ def generate_dateframe(text: list[str], label: list[int]) -> datasets.Dataset:
 
 	df_torch = Dataset.from_pandas(df)
 
-	return df_torch.map(data_preprocess, batched=True)
+	return df_torch.map(preprocess_function, batched=True)
 
 
 def preprocess_function(text: str, tokenizer) -> str:

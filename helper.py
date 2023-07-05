@@ -2,6 +2,7 @@ from intend_inference import *
 import numpy as np
 
 
+tokenizer = AutoTokenizer.from_pretrained('XLMRoberta-Alexa-Intents-Classification')
 
 train_data = pd.read_csv('/home/ubuntu/intent_classification/dataset/speech-to-intent/train.csv')
 test_data = pd.read_csv('/home/ubuntu/intent_classification/dataset/speech-to-intent/test.csv')
@@ -25,9 +26,9 @@ train_df_torch = Dataset.from_pandas(train_df)
 
 test_df_torch = Dataset.from_pandas(test_df)
 
-tokenized_train_df = train_df_torch.map(preprocess_function, batched=True)
+tokenized_train_df = train_df_torch.map(preprocess_function(tokenizer), batched=True)
 
-tokenized_test_df = test_df_torch.map(preprocess_function, batched=True)
+tokenized_test_df = test_df_torch.map(preprocess_function(tokenizer), batched=True)
 
 
 
