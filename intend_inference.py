@@ -5,6 +5,7 @@ import torch
 from torch.utils.data import DataLoader
 import pandas as pd
 from datasets import Dataset
+import datasets
 import evaluate
 
 TRAIN_BATCH = 32
@@ -42,7 +43,7 @@ def intent_inference(text_input: str, model_path: str) -> str:
 
 
 def model_finetune(num_labels: int, model_path: str, save_model_path: str, id2label: dict, label2id: dict,\
-					train_df: Dataset.Dataset, test_df: Dataset.Dataset):
+					train_df: datasets.Dataset, test_df: datasets.Dataset):
 	"""
 	fine tune existing LLM model
 
@@ -95,14 +96,14 @@ def compute_metrics(eval_pred):
 
 	accuracy = evaluate.load("accuracy")
 	predictions, labels = eval_pred
-	
+
 	predictions = np.argmax(predictions, axis=1)
 
 	return accuracy.compute(predictions=predictions, references=labels)
     
 
 
-def generate_dateframe(text: list[str], label: list[int]) -> Dataset.Dataset:
+def generate_dateframe(text: list[str], label: list[int]) -> datasets.Dataset:
 	"""
 	generate customer tokenized dataset 
 
