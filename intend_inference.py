@@ -1,6 +1,7 @@
 from transformers import AutoTokenizer, \
 AutoModelForSequenceClassification, TextClassificationPipeline,\
-TrainingArguments, Trainer, DataCollatorWithPadding, create_optimizer
+TrainingArguments, Trainer, DataCollatorWithPadding, \
+create_optimizer, TFAutoModelForSequenceClassification
 from transformers.keras_callbacks import KerasMetricCallback, PushToHubCallback
 import torch
 from torch.utils.data import DataLoader
@@ -64,7 +65,7 @@ def model_finetune(num_labels: int, model_path: str, save_model_path: str, id2la
 		num_train_steps=total_train_steps)
 	tokenizer = AutoTokenizer.from_pretrained(model_path)
 
-	model = AutoModelForSequenceClassification.from_pretrained(
+	model = TFAutoModelForSequenceClassification.from_pretrained(
 		model_path, num_labels=int(num_labels), id2label=id2label, label2id=label2id, \
 		ignore_mismatched_sizes=True)
 
