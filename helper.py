@@ -1,4 +1,4 @@
-from intend_inference import *
+from Intend_inference import *
 import numpy as np
 
 
