@@ -14,8 +14,8 @@ label2id = {intent_info['intent_name'][i]:int(intent_info['intent_class'][i]) fo
 train_label = train_data['intent_class']
 train_text = train_data['template']
 
-test_label = test_data['intent_class']
-test_text = test_data['template']
+test_label = test_data['intent_class'].to_list()
+test_text = test_data['template'].to_list()
 
 tokenized_train_df = generate_dateframe(list(train_text), list(train_label), "distilbert-base-uncased")
 tokenized_test_df = generate_dateframe(list(test_text), list(test_label), "distilbert-base-uncased")
