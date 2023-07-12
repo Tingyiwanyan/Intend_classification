@@ -101,10 +101,11 @@ def model_finetune(num_labels: int, model_path: str, save_model_path: str, id2la
 		output_dir=save_model_path,
 		tokenizer=tokenizer,)
 
-	callbacks = [metric_callback, push_to_hub_callback]
+	#callbacks = [metric_callback, push_to_hub_callback]
 
+	callbacks = [push_to_hub_callback]
 	model.fit(x=tf_train_set, validation_data=tf_validation_set, \
-		epochs=TRAIN_BATCH, callbacks=callbacks)
+		epochs=TRAIN_EPOCHS, callbacks=callbacks)
 
 
 
