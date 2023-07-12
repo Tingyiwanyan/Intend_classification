@@ -105,31 +105,7 @@ def model_finetune(num_labels: int, model_path: str, save_model_path: str, id2la
 	model.fit(x=tf_train_set, validation_data=tf_validation_set, \
 		epochs=TRAIN_BATCH, callbacks=callbacks)
 
-	
-	"""
-	training_args = TrainingArguments(
-		output_dir=save_model_path,
-	    learning_rate=LEARNING_RATE,
-	    per_device_train_batch_size=TRAIN_BATCH,
-	    per_device_eval_batch_size=EVAL_BATCH,
-	    num_train_epochs=TRAIN_EPOCHS,
-	    weight_decay=WEIGHT_DECAY,
-	    evaluation_strategy="epoch",
-	    save_strategy="epoch",
-	    load_best_model_at_end=True,
-	    push_to_hub=True,)
 
-	trainer = Trainer(
-		model=model,
-		args=training_args,
-		train_dataset=train_df,
-		eval_dataset=test_df,
-		tokenizer=tokenizer,
-		data_collator=data_collator,
-		compute_metrics=compute_metrics,)
-
-	trainer.train()
-	"""
 
 def compute_metrics(eval_pred):
 	"""

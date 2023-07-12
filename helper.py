@@ -25,8 +25,10 @@ tokenized_test_df = generate_dateframe(list(test_text), list(test_label), "disti
 
 #result = intent_inference(list(test_text),'/home/ubuntu/intent_classification/fine_tune_models/my_model')
 
+intent_info_projection = np.array(intent_info[['intent_class','intent_name']])
+
 Inpred = Ip()
-Inpred.model_evaluation(test_text, test_label, '/home/ubuntu/intent_classification/fine_tune_models/my_model')
+Inpred.model_evaluation(test_text, test_label, intent_info_projection, '/home/ubuntu/intent_classification/fine_tune_models/my_model')
 
 
 
