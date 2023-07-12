@@ -20,15 +20,15 @@ test_text = test_data['template'].to_list()
 tokenized_train_df = generate_dateframe(list(train_text), list(train_label), "distilbert-base-uncased")
 tokenized_test_df = generate_dateframe(list(test_text), list(test_label), "distilbert-base-uncased")
 
-#model_finetune(14, "distilbert-base-uncased", '/home/ubuntu/intent_classification/fine_tune_models/my_model', id2label, label2id,\
+#model_finetune(14, "distilbert-base-uncased", '/home/ubuntu/intent_classification/fine_tune_models/my_model_v1', id2label, label2id,\
 #					tokenized_train_df, tokenized_test_df)
 
 #result = intent_inference(list(test_text),'/home/ubuntu/intent_classification/fine_tune_models/my_model')
 
-intent_info_projection = np.array(intent_info[['intent_class','intent_name']])
+#intent_info_projection = np.array(intent_info[['intent_class','intent_name']])
 
 Inpred = Ip()
-Inpred.model_evaluation(test_text, test_label, intent_info_projection, '/home/ubuntu/intent_classification/fine_tune_models/my_model')
+#Inpred.model_evaluation(test_text, test_label, intent_info_projection, '/home/ubuntu/intent_classification/fine_tune_models/my_model')
 
 
 

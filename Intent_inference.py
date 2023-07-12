@@ -13,6 +13,7 @@ import tensorflow as tf
 import numpy as np
 from sklearn import metrics
 from typing import Union
+from sklearn.model_selection import train_test_split
 
 TRAIN_BATCH = 32
 EVAL_BATCH = 16
@@ -190,6 +191,21 @@ def generate_dateframe(text: list, label: list, model_path: str) -> datasets.Dat
 
 
 class Intent_prediction():
+
+	def train_test_split(self, input_text: list, input_label: list, test_size: float, \
+		random_state: int, model_path: str = "distilbert-base-uncased"):
+
+		self.train_text, self.train_label, self.test_text, self.test_label = \
+			train_test_split(input_text, input_label, test_size=test_size, random_state=random_state)
+
+		self.tokenized_train_df = generate_dateframe(list(self.train_text), list(self.train_label), model_path)
+		self.tokenized_test_df = generate_dateframe(list(self.test_text), list(self.test_label), model_path)
+
+
+	def model_finetune(self, num_labels: int, model_path: str, save_model_path: str, id2label: dict, label2id: dict,\
+					train_df: datasets.Dataset, test_df: datasets.Dataset)
+
+		model_finetune(num_labels, model_path, save_model_path, id2label, label2id, train_df, test_df)
 
 	def model_evaluation(self, text_input: Union[list, str], test_groundtruth_label:Union[list, str, int], \
 		model_path: str, intent_info: np.array = None, if_convert = True):
