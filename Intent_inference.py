@@ -195,7 +195,7 @@ class Intent_prediction():
 	def train_test_split(self, input_text: list, input_label: list, test_size: float, \
 		random_state: int, model_path: str = "distilbert-base-uncased"):
 
-		self.train_text, self.train_label, self.test_text, self.test_label = \
+		self.train_text, self.test_text, self.train_label, self.test_label = \
 			train_test_split(input_text, input_label, test_size=test_size, random_state=random_state)
 
 		self.tokenized_train_df = generate_dateframe(list(self.train_text), list(self.train_label), model_path)
