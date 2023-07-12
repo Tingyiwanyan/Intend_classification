@@ -203,7 +203,7 @@ class Intent_prediction():
 
 
 	def model_finetune(self, num_labels: int, model_path: str, save_model_path: str, id2label: dict, label2id: dict,\
-					train_df: datasets.Dataset, test_df: datasets.Dataset)
+					train_df: datasets.Dataset, test_df: datasets.Dataset):
 
 		model_finetune(num_labels, model_path, save_model_path, id2label, label2id, train_df, test_df)
 
