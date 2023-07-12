@@ -1,4 +1,4 @@
-from Intent_inference import *
+from Intent_inference import Intent_prediction as Ip
 import numpy as np
 
 
@@ -22,7 +22,10 @@ tokenized_test_df = generate_dateframe(list(test_text), list(test_label), "disti
 #model_finetune(14, "distilbert-base-uncased", '/home/ubuntu/intent_classification/fine_tune_models/my_model', id2label, label2id,\
 #					tokenized_train_df, tokenized_test_df)
 
-result = intent_inference(list(test_text),'/home/ubuntu/intent_classification/fine_tune_models/my_model')
+#result = intent_inference(list(test_text),'/home/ubuntu/intent_classification/fine_tune_models/my_model')
+
+Inpred = Ip()
+Inpred.model_evaluation(test_text, test_label, '/home/ubuntu/intent_classification/fine_tune_models/my_model')
 
 
 
