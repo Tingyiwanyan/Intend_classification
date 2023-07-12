@@ -216,31 +216,31 @@ class Intent_prediction():
 
 	def model_evaluation(self, text_input: Union[list, str], test_groundtruth_label:Union[list, str, int], \
 		model_path: str, intent_info: np.array = None, if_convert = True):
-	"""
-	model evaluation with test input and optional intent info, if intent info is set to default
-	value None, the test_groundtruth_label is expected to have text label input
+		"""
+		model evaluation with test input and optional intent info, if intent info is set to default
+		value None, the test_groundtruth_label is expected to have text label input
 
-	Parameters:
-	-----------
-	test_input: list testing text input
-	test_groundtrugh_label: list test label input
-	model_path: path to LLM model
-	intent_info: projection between int class label and text class label
+		Parameters:
+		-----------
+		test_input: list testing text input
+		test_groundtrugh_label: list test label input
+		model_path: path to LLM model
+		intent_info: projection between int class label and text class label
 
-	Returns:
-	--------
-	print evaluation metric 
-	"""
+		Returns:
+		--------
+		print evaluation metric 
+		"""
 
-	prediction = intent_inference(text_input, model_path)
-	self.prediction = prediction
-	if if_convert == True:
-		try:
-			validate_evaluation(prediction, test_groundtruth_label, intent_info)
-		except:
-			print("Please provide intent class indexing matrix")
-	else:
-		validate_evaluation(prediction, test_groundtruth_label, if_convert = False)
+		prediction = intent_inference(text_input, model_path)
+		self.prediction = prediction
+		if if_convert == True:
+			try:
+				validate_evaluation(prediction, test_groundtruth_label, intent_info)
+			except:
+				print("Please provide intent class indexing matrix")
+		else:
+			validate_evaluation(prediction, test_groundtruth_label, if_convert = False)
 
 	def intent_inference(text_input: Union[list, str], model_path: str) -> 	Union[list, str]:
 
