@@ -12,6 +12,7 @@ import evaluate
 import tensorflow as tf
 import numpy as np
 from sklearn import metrics
+from typing import Union
 
 TRAIN_BATCH = 32
 EVAL_BATCH = 16
