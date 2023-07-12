@@ -11,15 +11,16 @@ import datasets
 import evaluate
 import tensorflow as tf
 import numpy as np
+from sklearn import metrics
 
 TRAIN_BATCH = 32
 EVAL_BATCH = 16
 TRAIN_EPOCHS = 3
 LEARNING_RATE = 2e-5
-WEIGHT_DECAY = 0.01
+#WEIGHT_DECAY = 0.01
 
 
-def intent_inference(text_input: str, model_path: str) -> str:
+def intent_inference(text_input: list, model_path: str) -> str:
 	"""
 	inferencing intent based on innput text
 
@@ -39,10 +40,10 @@ def intent_inference(text_input: str, model_path: str) -> str:
 
 	res = classifier(text_input)
 
-	#intent = res['label']
-	#score = res['score']
+	intent = res['label']
+	score = res['score']
 
-	return res
+	return intent
 
 
 def model_finetune(num_labels: int, model_path: str, save_model_path: str, id2label: dict, label2id: dict,\
@@ -135,7 +136,50 @@ def compute_metrics(eval_pred):
 	predictions = np.argmax(predictions, axis=1)
 
 	return accuracy.compute(predictions=predictions, references=labels)
-    
+
+
+def evaluation_metric(y_pred: list, y_true: list):
+	"""
+	print evaluation results, precision, recall, f1 score
+	"""
+
+	print(metrics.classification_report(y_true, y_pred, digits=3))
+
+
+def project_labels(label: int, labels_index: np.array):
+	"""
+	project class index to text label
+
+	Parameters:
+	label: class label
+	labels_index: intent class label index,
+
+	Returns:
+	labeled text
+	"""
+	index = np.where(labels_index[:,0] == label)[0][0]
+
+	return labels_index[index][1]
+
+
+def validate_evaluation(test_text: list, test_label:list, labels_index: np.array, if_convert = True):
+	"""
+	evaluate testing result
+
+	Parameters:
+	test_text: testing text to be evaluated
+	test_label: ground truth test label
+	labels_index: intent class label index
+
+	Returns:
+	print the evaluation metrics
+	"""
+
+	if if_convert == True:
+		testing_label = map(lambda x: project_labels(x, labels_index), test_label)
+
+	predict_label = 2
+
 
 
 def generate_dateframe(text: list, label: list, model_path: str) -> datasets.Dataset:
