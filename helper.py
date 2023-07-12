@@ -1,4 +1,5 @@
 from Intent_inference import Intent_prediction as Ip
+from Intent_inference import *
 import numpy as np
 
 
