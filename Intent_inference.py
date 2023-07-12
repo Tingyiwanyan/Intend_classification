@@ -215,8 +215,7 @@ def generate_dateframe(text: list, label: list, model_path: str) -> datasets.Dat
 class Intent_prediction():
 
 	def model_evaluation(self, text_input: Union[list, str], test_groundtruth_label:Union[list, str, int], \
-	model_path: str, intent_info: np.array = None, if_convert = True):
-
+		model_path: str, intent_info: np.array = None, if_convert = True):
 	"""
 	model evaluation with test input and optional intent info, if intent info is set to default
 	value None, the test_groundtruth_label is expected to have text label input
