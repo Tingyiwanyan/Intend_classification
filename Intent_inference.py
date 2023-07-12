@@ -20,7 +20,7 @@ LEARNING_RATE = 2e-5
 #WEIGHT_DECAY = 0.01
 
 
-def intent_inference(text_input: list, model_path: str) -> str:
+def intent_inference(text_input: Union[list, str], model_path: str) -> 	Union[list, str]:
 	"""
 	inferencing intent based on innput text
 
@@ -40,10 +40,15 @@ def intent_inference(text_input: list, model_path: str) -> str:
 
 	res = classifier(text_input)
 
+	if type(text_input) == list:
+		label = [res[i]['label'] for i in range(len(res))]
+	else:
+		label = res['label']
+
 	#intent = res['label']
 	#score = res['score']
 
-	return res
+	return label
 
 
 def model_finetune(num_labels: int, model_path: str, save_model_path: str, id2label: dict, label2id: dict,\
@@ -162,13 +167,13 @@ def project_labels(label: int, labels_index: np.array):
 	return labels_index[index][1]
 
 
-def validate_evaluation(test_text: list, test_label:list, labels_index: np.array, if_convert = True):
+def validate_evaluation(test_label: list, test_groundtruth_label:list, labels_index: np.array, if_convert = True):
 	"""
 	evaluate testing result
 
 	Parameters:
-	test_text: testing text to be evaluated
-	test_label: ground truth test label
+	test_label model prediction label
+	test_groundtruth_label: ground truth test label
 	labels_index: intent class label index
 
 	Returns:
@@ -176,9 +181,38 @@ def validate_evaluation(test_text: list, test_label:list, labels_index: np.array
 	"""
 
 	if if_convert == True:
-		testing_label = map(lambda x: project_labels(x, labels_index), test_label)
+		testing_label = list(map(lambda x: project_labels(x, labels_index), test_groundtruth_label))
 
-	predict_label = 2
+	evaluation_metric(test_label, testing_label)
+
+
+def model_evaluation(text_input: Union[list, str], test_groundtruth_label:Union[list, str, int], \
+	model_path: str, intent_info: np.array = None, if_convert = True):
+
+	"""
+	model evaluation with test input and optional intent info, if intent info is set to default
+	value None, the test_groundtruth_label is expected to have text label input
+
+	Parameters:
+	-----------
+	test_input: list testing text input
+	test_groundtrugh_label: list test label input
+	model_path: path to LLM model
+	intent_info: projection between int class label and text class label
+
+	Returns:
+	--------
+	print evaluation metric 
+	"""
+
+	prediction = intent_inference(text_input, model_path)
+	if if_convert == True:
+		try:
+			validate_evaluation(prediction, test_groundtruth_label, intent_info)
+		except:
+			print("Please provide intent class indexing matrix")
+	else:
+		validate_evaluation(prediction, test_groundtruth_label, if_convert = False)
 
 
 
