@@ -40,10 +40,10 @@ def intent_inference(text_input: list, model_path: str) -> str:
 
 	res = classifier(text_input)
 
-	intent = res['label']
-	score = res['score']
+	#intent = res['label']
+	#score = res['score']
 
-	return intent
+	return res
 
 
 def model_finetune(num_labels: int, model_path: str, save_model_path: str, id2label: dict, label2id: dict,\
